@@ -51,6 +51,8 @@ class RtmEventHandler(object):
                     self.msg_writer.demo_attachment(event['channel'])
                 elif 'echo' in msg_txt:
                     self.msg_writer.send_message(event['channel'], msg_txt)
+                #elif '国籍' in msg_txt | 'Country' in msg_txt:
+                #	self.msg_writer.send_syori(event['channel'] msg_txt)
                 else:
                     self.msg_writer.write_prompt(event['channel'])
 
