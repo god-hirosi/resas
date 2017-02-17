@@ -160,7 +160,7 @@ class Messenger(object):
         return urls
     
     #  都道府県コードから、あそびゅーで検索結果のURLを返す
-    def get_asoview_url(self, prefs):
+    def get_asoview_url(self, prefs, channel_id):
         urls = []
         for pref in sorted(set(prefs), key=prefs.index):
             pn = P_c2k[pref]
