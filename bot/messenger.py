@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 # 国籍コード
 C_c2n = {}
 C_n2c = {}
-with open('data/CountryList.csv') as f:
+with open('./data/CountryList.csv') as f:
     f.readline()
     rs = csv.reader(f)
     for r in rs:
@@ -22,7 +22,7 @@ with open('data/CountryList.csv') as f:
 # 都道府県コード
 P_c2n = {}
 P_n2c = {}
-with open('data/PrefExchangeList.csv') as f:
+with open('/data/PrefExchangeList.csv') as f:
     f.readline()
     rs = csv.reader(f)
     for r in rs:
@@ -34,7 +34,7 @@ with open('data/PrefExchangeList.csv') as f:
 # 来訪人数辞書
 p2c = {}
 c2p = {}
-with open('data/list_pc.csv'):
+with open('./data/list_pc.csv'):
     rs = csv.reader(f)
     for r in rs:
         p = r[0]
