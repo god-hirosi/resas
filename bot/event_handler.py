@@ -5,6 +5,9 @@ import re
 
 logger = logging.getLogger(__name__)
 
+# 国籍と都道府県の名前とコードの変換リストを読み込み
+countryList = pd.read_csv("CountryList.csv", names = ('regionCd', 'regionName', 'countryCd', 'countryName'))
+prefList = pd.read_csv("PrefExchangeList.csv", names = ('prefName', 'shortName', 'prefCd'))
 
 class RtmEventHandler(object):
     def __init__(self, slack_clients, msg_writer):
