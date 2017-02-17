@@ -138,7 +138,7 @@ class Messenger(object):
             count += 1
             if count == 2:
                 break
-        self.send_message(channel_id, 'We recommend %s Pref. and %s Pref. !' % (cand[0], cand[1]))
+        self.send_message(channel_id, 'We recommend %s Pref. and %s Pref. !' % (P_c2n[cand[0]], P_c2n[cand[1]]))
         return cand[0], cand[1]
     
     '''
@@ -250,7 +250,7 @@ class Messenger(object):
         return tmp_nation1, tmp_nation2
     '''
     # 都道府県コードから食べログで和食・日本料理の検索結果URLを返す
-    def get_taberogu_url(prefCdList):
+    def get_taberogu_url(self, prefCdList):
         url_tabe_list = []
         for pref_ in prefCdList:
             if (pref_ not in url_tabe_list) and str(pref_) != '0':
@@ -267,7 +267,7 @@ class Messenger(object):
         return url_tabe_list
     
     #  都道府県コードから、あそびゅーで検索結果のURLを返す
-    def get_asoview_url(prefCdList):
+    def get_asoview_url(self, prefCdList):
         url_aso_list = []
         for pref_ in prefCdList:
             if (pref_ not in url_aso_list) and str(pref_) != '0':
