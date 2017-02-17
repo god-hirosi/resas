@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
+reload(sys)
 sys.setdefaultencoding('utf-8')
 import json
 import logging
@@ -87,18 +88,20 @@ class RtmEventHandler(object):
                     self.msg_writer.send_message(event['channel'], msg_txt)
                 # 国籍を入力されたら、その国籍に人気の都道府県Top2を取得し、情報を推薦する
                 elif msg_txt is not None:
+                    flag = False
                     for cn in C_n2c:
                         if cn not in str(msg_txt):
                             continue
                         else:
                             in_nation = cn
                             pref1, pref2 =  self.msg_writer.get_PrefTop2_fromNation(in_nation, event['channel'])
+                            flag = True
                             break
-                    
-                    #食べログ: url_tabe = URLが格納されたリスト
-                    url_tabe_list = self.msg_writer.get_taberogu_url([pref1, pref2])
-                    #あそびゅー
-                    url_aso_list = self.msg_writer.get_asoview_url([pref1, pref2])
+                    if flag:
+                        #食べログ: url_tabe = URLが格納されたリスト
+                        url_tabe_list = self.msg_writer.get_taberogu_url([pref1, pref2])
+                        #あそびゅー
+                        url_aso_list = self.msg_writer.get_asoview_url([pref1, pref2])
                 else:
                     self.msg_writer.write_prompt(event['channel'])
                 '''
