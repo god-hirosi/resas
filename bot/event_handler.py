@@ -106,15 +106,13 @@ class RtmEventHandler(object):
             url_tabe_list = self.get_taberogu_url(inp, purp_g, prefs, event['channel'])
             url_aso_list = self.get_asoview_url(inp, purp_r, prefs, event['channel'])
             initialize_param()
-            continue            
             
         elif purp_r:
             url_aso_list = self.get_asoview_url(inp, purp_r, prefs, event['channel'])
             url_tabe_list = self.get_taberogu_url(inp, purp_g, prefs, event['channel'])
             initialize_param()
-            continue            
-        
-        self.msg_writer.purpose_check(event['channel'])
+        else:
+            self.msg_writer.purpose_check(event['channel'])
     
     def _handle_by_type(self, event_type, event):
         # See https://api.slack.com/rtm for a full list of events
