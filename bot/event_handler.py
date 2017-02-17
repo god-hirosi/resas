@@ -186,7 +186,7 @@ class RtmEventHandler(object):
                                 self.inp = ['c', cn]
                                 break
 
-                        for pn in P_n2c:
+                        for pn in P_k2c:
                             if pn not in msg_txt:
                                 continue
                             else:
