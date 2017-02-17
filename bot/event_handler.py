@@ -178,7 +178,7 @@ class RtmEventHandler(object):
                                 self.prefs = self.msg_writer.get_PrefTop2_fromNation(nations, event['channel'])
                                 self.inp = ['p', pn]
                                 break
-                    self.suggest(self.inp, self.prefs, self.purp_g, self.purp_r)
+                    self.suggest()
                 else:
                     self.msg_writer.write_prompt(event['channel'])
                 '''
