@@ -46,7 +46,7 @@ class RtmEventHandler(object):
         self.clients = slack_clients
         self.msg_writer = msg_writer
         self.inp = None
-        self.prefs = []
+        self.prefs = {}
         self.purp_g = False
         self.purp_r = False
 
@@ -149,7 +149,7 @@ class RtmEventHandler(object):
                 elif 'echo' in msg_txt:
                     self.msg_writer.send_message(event['channel'], msg_txt)
                 elif msg_txt is not None:
-                    print self.inp, self.prefs, self.purp_g, self.purp_r
+                    self.msg_writer.write_param(self.inp, self.prefs, self.purp_r, self.purp_g) 
                     if 'グルメ' in msg_txt:
                         if len(self.prefs) == 0:
                             self.purp_g = True

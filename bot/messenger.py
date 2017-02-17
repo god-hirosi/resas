@@ -135,7 +135,10 @@ class Messenger(object):
     def purpose_check(self, channel_id):
         self.send_message(channel_id, '何を調べたい？ グルメ or 体験から選んでね！'.decode('utf-8'))
     
-    
+    def write_params(self, a, b, c, d):
+        txt = str(len(a)) + ',' + str(len(b)) + ',' + str(c) + ',' + str(d)
+        self.send_message(channel_id, txt.decode('utf-8'))
+        
     def write_initial(self, purpose, channel_id):
         # 目的が決まっている場合は必ず聞く。
         v = random.randint(1, 2)
