@@ -163,7 +163,7 @@ class RtmEventHandler(object):
                 elif 'echo' in msg_txt:
                     self.msg_writer.send_message(event['channel'], msg_txt)
                 elif msg_txt is not None:
-                    self.msg_writer.write_param(self.inp, self.prefs, self.purp_r, self.purp_g) 
+                    self.msg_writer.write_param(self.inp, self.prefs, self.purp_r, self.purp_g, event['channel']) 
                     if 'グルメ' in msg_txt:
                         if len(self.prefs) == 0:
                             self.purp_g = True

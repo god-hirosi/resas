@@ -121,7 +121,7 @@ class Messenger(object):
     def purpose_check(self, channel_id):
         self.send_message(channel_id, '何を調べたい？ グルメ or 体験から選んでね！'.decode('utf-8'))
     
-    def write_param(self, a, b, c, d):
+    def write_param(self, a, b, c, d, channel_id):
         txt = str(a) + ',' + str(b) + ',' + str(c) + ',' + str(d)
         self.send_message(channel_id, txt.decode('utf-8'))
         
