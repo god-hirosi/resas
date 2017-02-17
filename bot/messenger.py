@@ -126,7 +126,7 @@ class Messenger(object):
     ## 新規作成関数エリア
     ##############################
     
-    def get_PrefTop2_fromNation(in_nation, channel_id):
+    def get_PrefTop2_fromNation(self, in_nation, channel_id):
         #if in_nation not in P_n2c:
             
         countryCode = P_n2c[in_nation]
