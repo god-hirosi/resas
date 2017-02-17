@@ -3,6 +3,8 @@
 import logging
 import random
 import csv
+import os
+print os.getcwd()
 # import pandas as pd
 
 logger = logging.getLogger(__name__)
