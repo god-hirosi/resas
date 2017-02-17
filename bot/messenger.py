@@ -133,7 +133,7 @@ class Messenger(object):
         res = c2p[countryCode]
         count = 0
         cand = []
-        for p, v in sorted(res.items(), lambda x: x[1], reverse=True):
+        for p, v in sorted(res.items(), key=lambda x: x[1], reverse=True):
             cand.append(p)
             count += 1
             if count == 2:
