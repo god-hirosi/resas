@@ -83,7 +83,7 @@ class RtmEventHandler(object):
                 elif 'echo' in msg_txt:
                     self.msg_writer.send_message(event['channel'], msg_txt)
                 # 国籍を入力されたら、その国籍に人気の都道府県Top2を取得し、情報を推薦する
-                elif:
+                elif msg_txt is not None:
                     for cn in C_n2c:
                         if cn not in msg_txt:
                             continue
