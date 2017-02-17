@@ -101,9 +101,18 @@ class RtmEventHandler(object):
                             break
                     if flag:
                         #食べログ: url_tabe = URLが格納されたリスト
-                        url_tabe_list = self.msg_writer.get_taberogu_url([pref1, pref2])
+                        url_tabe_list = self.msg_writer.get_taberogu_url(prefs, event['channel'])
                         #あそびゅー
-                        url_aso_list = self.msg_writer.get_asoview_url([pref1, pref2])
+                        url_aso_list = self.msg_writer.get_asoview_url(prefs, event['channel'])
+                    # 目的はと聞いて、グルメと言われたら食べログを出して、体験と言われたらあそびゅーからいれる。
+                    '''
+                    for pn in P_n2c:
+                        if pn not in msg_txt:
+                            continue
+                        else:
+                            pref = pn
+                            nations = get_NationTop2_fromPref(pref)
+                    '''
                 else:
                     self.msg_writer.write_prompt(event['channel'])
                 '''

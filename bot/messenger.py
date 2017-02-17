@@ -143,9 +143,11 @@ class Messenger(object):
                 break
         self.send_message(channel_id, 'We recommend %s Pref. and %s Pref. !' % (P_c2n[cand[0]], P_c2n[cand[1]]))
         return cand
+   
+    #def get_NationTop2_fromPref(self, 
     
     # 都道府県コードから食べログで和食・日本料理の検索結果URLを返す
-    def get_taberogu_url(self, prefs):
+    def get_taberogu_url(self, prefs, channel_id):
         urls = []
         for pref in sorted(set(prefs), key=prefs.index):
             pn = P_c2n[pref]
@@ -154,6 +156,7 @@ class Messenger(object):
                 '%E5%92%8C%E9%A3%9F%20%E6%97%A5%E6%9C%AC%E6%96%99%' + \
                 'E7%90%86%20%E3%83%A9%E3%83%B3%E3%83%81&svd=&svt=&svps=2'  
             urls.append(url)
+            self.send_message(channel_id, '%s' % (url))
         return urls
     
     #  都道府県コードから、あそびゅーで検索結果のURLを返す
@@ -171,6 +174,7 @@ class Messenger(object):
             url = 'http://www.asoview.com/search/?ymd=&rg=&ct=7&ac=&np=&q=' + pn + \
                 '&bd=&targetAge=18&timeRequired=180&tg=24&tg=25&tg=26&tg=27&tg=28'
             urls.append(url)
+            self.send_message(channel_id, '%s' % (url))
         return urls
     '''
     def get_resas(key,url):
