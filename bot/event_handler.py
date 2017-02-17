@@ -107,7 +107,7 @@ class RtmEventHandler(object):
     
     def initialize_param(self):
         self.inp = None
-        self.prefs = {}
+        self.prefs = []
         self.purp_g = False
         self.purp_r = False
         
