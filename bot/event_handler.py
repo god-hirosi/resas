@@ -73,6 +73,7 @@ class RtmEventHandler(object):
         if ('user' in event) and (not self.clients.is_message_from_me(event['user'])):
 
             msg_txt = event['text']
+            msg_txt = msg_txt.encode('utf-8')
 
             if self.clients.is_bot_mention(msg_txt) or self._is_direct_message(event['channel']):
                 # e.g. user typed: "@pybot tell me a joke!"
@@ -90,7 +91,7 @@ class RtmEventHandler(object):
                 elif msg_txt is not None:
                     flag = False
                     for cn in C_n2c:
-                        if cn not in str(msg_txt):
+                        if cn not in msg_txt:
                             continue
                         else:
                             in_nation = cn
