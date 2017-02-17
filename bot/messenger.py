@@ -30,8 +30,8 @@ with open('bot/data/PrefExchangeList.csv') as f:
     f.readline()
     rs = csv.reader(f)
     for r in rs:
-        c = r[1]
-        n = r[2]
+        c = r[2]
+        n = r[1]
         P_c2n[c] = n
         P_n2c[n] = c
 
