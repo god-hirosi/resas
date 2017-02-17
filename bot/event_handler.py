@@ -31,14 +31,17 @@ with open('bot/data/CountryList.csv') as f:
 # 都道府県コード
 P_c2n = {}
 P_n2c = {}
+P_k2c = [}
 with open('bot/data/PrefExchangeList.csv') as f:
     f.readline()
     rs = csv.reader(f)
     for r in rs:
+        k = r[0]
         c = r[1]
         n = r[2]
         P_c2n[c] = n
         P_n2c[n] = c
+        P_k2c[k] = k
 
 # 来訪人数辞書
 p2c = {}
@@ -168,7 +171,7 @@ class RtmEventHandler(object):
                         if len(self.prefs) == 0:
                             self.msg_writer.write_initial(True, event['channel'])
                             return
-                    elif '思い出' in msg_txt:
+                    elif '体験' in msg_txt:
                         self.purp_r = True
                         if len(self.prefs) == 0:
                             self.msg_writer.write_initial(True, event['channel'])
