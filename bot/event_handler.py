@@ -84,6 +84,9 @@ class RtmEventHandler(object):
             res = c2p[countryCode]
             count = 0
             for p, v in sorted(res.items(), key=lambda x: x[1], reverse=True):
+                if self.inp[0] == 'p':
+                    if p == P_k2c[self.inp[1]]:
+                        continue
                 cand[p] = v
                 count += 1
                 if count == 2:
@@ -195,9 +198,9 @@ class RtmEventHandler(object):
                                 continue
                             else:
                                 pref = pn
+                                self.inp = ['p', pn]
                                 nations = self.get_NationTop2_fromPref(pref)
                                 self.get_PrefTop2_fromNation(nations)
-                                self.inp = ['p', pn]
                                 break
                     self.suggest(event)
                 else:
