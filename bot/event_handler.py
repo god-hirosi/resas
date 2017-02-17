@@ -84,9 +84,10 @@ class RtmEventHandler(object):
             res = c2p[countryCode]
             count = 0
             for p, v in sorted(res.items(), key=lambda x: x[1], reverse=True):
-                if self.inp[0] == 'p':
-                    if p == P_k2c[self.inp[1]]:
-                        continue
+                if self.inp is not None:
+                    if self.inp[0] == 'p':
+                        if p == P_k2c[self.inp[1]]:
+                            continue
                 cand[p] = v
                 count += 1
                 if count == 2:
