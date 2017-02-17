@@ -2,8 +2,15 @@
 import json
 import logging
 import re
+import requests
+import pandas as pd
+from pandas import DataFrame
 
 logger = logging.getLogger(__name__)
+
+# 国籍と都道府県の名前とコード変換リストを読み込み
+countryList = pd.read_csv("data/CountryList.csv", names = ('regionCd', 'regionName', 'countryCd', 'countryName'))
+prefList = pd.read_csv("data/PrefExchangeList.csv", names = ('prefName', 'shortName', 'prefCd'))
 
 
 class RtmEventHandler(object):
@@ -51,8 +58,29 @@ class RtmEventHandler(object):
                     self.msg_writer.demo_attachment(event['channel'])
                 elif 'echo' in msg_txt:
                     self.msg_writer.send_message(event['channel'], msg_txt)
-                #elif '国籍' in msg_txt | 'Country' in msg_txt:
-                #	self.msg_writer.send_syori(event['channel'] msg_txt)
+                # 国籍を入力されたら、その国籍に人気の都道府県Top2を取得し、情報を推薦する
+                elif countryList[countryList['countryName'].str.contains(str(msg_txt))]:
+                    # 国籍から都道府県Top2のコードを取得
+                    in_nation = countryList[countryList['countryName'].str.contains(str(msg_txt))]['countryName']
+                    pref1, pref2 = get_PrefTop2_fromNation(in_nation)
+                    # 各都道府県に対して情報を取得: pref1, 2
+                    print "処理を実装"
+                    url1 = get_taberogu_url(pref1)
+                    url2 = get_taberogu_url(pref2)
+                    # 情報を提示
+                # 都道府県を入力されたら、その都道府県が人気な国籍Top2を取得し、各国籍での人気都道府県Top2を取得し、情報を推薦する
+                elif prefList[prefList['prefName'.str.contains(str(msg_txt))]]:
+                    # 都道府県が人気な国籍Top2のコードを取得
+                    in_pref = prefList[prefList['prefName'.str.contains(str(msg_txt))]]['prefCd']
+                    nationCd3, nationCd4 = get_NationTop2_fromPref(in_pref)
+                    # 各国籍に対して人気都道府県Top2のコードを取得
+                    pref3, pref4 = get_PrefTop2_fromNation(nationCd3)
+                    pref5, pref6 = get_PrefTop2_fromNation(nationCd4)
+                    # 入力された都道府県コードを取得
+                    pref0 = get_prefCd(in_pref)
+                    # 各都道府県に対して情報を取得: pref0, 3, 4, 5, 6
+                    print "処理を実装"
+                    # 情報を提示
                 else:
                     self.msg_writer.write_prompt(event['channel'])
 

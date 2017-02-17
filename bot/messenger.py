@@ -2,9 +2,15 @@
 
 import logging
 import random
+import requests
+import pandas as pd
+from pandas import DataFrame
 
 logger = logging.getLogger(__name__)
 
+# 国籍と都道府県の名前とコード変換リストを読み込み
+countryList = pd.read_csv("data/CountryList.csv", names = ('regionCd', 'regionName', 'countryCd', 'countryName'))
+prefList = pd.read_csv("data/PrefExchangeList.csv", names = ('prefName', 'shortName', 'prefCd'))
 
 class Messenger(object):
     def __init__(self, slack_clients):
@@ -61,3 +67,122 @@ class Messenger(object):
             "color": "#7CD197",
         }
         self.clients.web.chat.post_message(channel_id, txt, attachments=[attachment], as_user='true')
+        
+    ##############################
+    ## 新規作成関数エリア
+    ##############################
+
+    def get_resas(key,url):
+        x = json.loads(requests.get('https://opendata.resas-portal.go.jp/' + url, headers={'X-API-KEY':key}).text)
+        #print (x['message'],x['result'])
+        #print x['result']
+        return x['result']
+        #return(type(x['result']['data'][0]['lat']))
+
+    # 国籍コードを入れると、よく行く都道府県のコードを返す
+    def get_Pref_fromNation(key,url):
+        x = json.loads(requests.get('https://opendata.resas-portal.go.jp/' + url, headers={'X-API-KEY':key}).text)
+        return x['result']
+
+    # 都道府県コードを入れると、よく訪問する国籍のコードを返す
+    def get_Nation_fromPref(key,url):
+        x = json.loads(requests.get('https://opendata.resas-portal.go.jp/' + url, headers={'X-API-KEY':key}).text)
+        return x['result']
+
+    # 都道府県コード、月、を入れると、その月の訪日外国人人数を返す
+    def get_VisitNum(key,url):
+        x = json.loads(requests.get('https://opendata.resas-portal.go.jp/' + url, headers={'X-API-KEY':key}).text)
+        return x['result']
+
+    # 都道府県コードを入れると、日本人がよく行く観光スポット名を返す
+    def get_Spot(key,url):
+        x = json.loads(requests.get('https://opendata.resas-portal.go.jp/' + url, headers={'X-API-KEY':key}).text)
+        return x['result']
+
+    # 国籍のコード変換
+    def get_nationCd(in_nation):
+        return int(countryList.loc[(countryList.countryName == in_nation), 'countryCd'])
+
+    # 都道府県のコード変換
+    def get_prefCd(in_pref):
+        return int(prefList.loc[(prefList.prefName == in_pref), 'prefCd'])
+
+    # 国籍から都道府県Top2のコードを取得
+    def get_PrefTop2_fromNation(in_nation):
+        # 国籍をコード化
+        nationCd1 = get_nationCd(in_nation)
+        print "国籍：%s、コード：%d" %(in_nation, nationCd1)
+        #
+        # 国籍コードから人気の都道府県コードを2件取得：（pref1, pref2） #※アメリカ合衆国：東京都、などない場合もある。その場合は、0を返す。
+        tmp_pref1, tmp_value1 = 0, 0
+        tmp_pref2, tmp_value2 = 1, 1
+        i = 1
+        while i < 48:
+            print i
+            pref =  get_Pref_fromNation(resas_key,'api/v1/tourism/foreigners/forTo?year='+year
+                        +'&prefCode='+str(i)   
+                        +'&regionCode='+region_code
+                        +'&countryCode='+str(nationCd1)
+                        +'&purpose='+purpose)
+            #print str(pref)
+            if str(pref) == 'None':
+                i += 1
+                continue
+            n = 0
+            j = 0
+            while j < len(pref['changes'][0]['data']):
+                if (pref['changes'][0]['data'][j]['year'] == int(year)) and (pref['changes'][0]['data'][j]['quarter'] == int(quarter)):
+                    n = int(pref['changes'][0]['data'][j]['value'])
+                j += 1        
+            if n > tmp_value2:
+                tmp_value1 = tmp_value2
+                tmp_pref1 = tmp_pref2
+                tmp_value2 = n
+                tmp_pref2 = int(pref['changes'][0]['prefCode'])
+            else:
+                if n > tmp_value1:
+                    tmp_value1 = n
+                    tmp_pref1 = int(pref['changes'][0]['prefCode'])
+            i += 1
+        return tmp_pref1, tmp_pref2
+    
+    # 都道府県から人気な国籍Top2のコードを取得
+    def get_NationTop2_fromPref(in_pref):
+        # 都道府県をコード化
+        prefCd = get_prefCd(in_pref)
+        print "都道府県：%s、コード：%d" %(in_pref, prefCd)
+        #
+        # 都道府県コードから人気の国籍コードを2件取得: (nation1, nation2)
+        nation = get_Nation_fromPref(resas_key,'api/v1/tourism/foreigners/forFrom?purpose='+purpose
+                      +'&year='+year
+                      +'&prefCode='+pref_code)
+        tmp_nation1, tmp_value1 = 0, 0
+        tmp_nation2, tmp_value2 = 1, 1
+        i = 0
+        j = 0
+        n = 0
+        while i < len(nation['changes']):
+            while j < len(nation['changes'][i]['data']):
+                if (int(nation['changes'][i]['data'][j]['year']) == int(year)) and (int(nation['changes'][i]['data'][j]['quarter']) == int(quarter)):
+                    n = nation['changes'][i]['data'][j]['value']
+                    #print n
+                j += 1
+            if n > tmp_value2:
+                tmp_value1 = tmp_value2
+                tmp_nation1 = tmp_nation2
+                tmp_value2 = n
+                tmp_nation2 = int(nation['changes'][i]['countryCode'])
+            elif n > tmp_value1:
+                tmp_value1 = n
+                tmp_nation1 = int(nation['changes'][i]['countryCode'])
+            i += 1
+            j = 0
+        return tmp_nation1, tmp_nation2
+    
+    # 都道府県コードから食べログで和食・日本料理の検索結果URLを返す
+    def get_taberogu_url(prefCd):
+        pref_short = prefList[prefList['prefCd'].str.contains(str(prefCd))]['shortName']
+        url = 'https://tabelog.com/' + pref_short + '/rstLst/lunch/washoku/?sort_mode=1' + \
+        '&sw=%E6%97%A5%E6%9C%AC%E6%96%99%E7%90%86&sk=' +\
+        '%E5%92%8C%E9%A3%9F%20%E6%97%A5%E6%9C%AC%E6%96%99%E7%90%86%20%E3%83%A9%E3%83%B3%E3%83%81&svd=&svt=&svps=2'
+        return url
