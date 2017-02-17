@@ -41,21 +41,7 @@ with open('bot/data/PrefExchangeList.csv') as f:
         P_c2k[c] = k
         P_k2c[k] = c
 
-# 来訪人数辞書
-p2c = {}
-c2p = {}
-with open('bot/data/list_pc.csv') as f:
-    rs = csv.reader(f)
-    for r in rs:
-        p = r[0]
-        c = r[1]
-        v = r[2]
-        if p not in p2c:
-            p2c[p] = {}
-        if c not in c2p:
-            c2p[c] = {}
-        p2c[p][c] = v
-        c2p[c][p] = v
+
         
 # 国籍と都道府県の名前とコード変換リストを読み込み
 # countryList = pd.read_csv("data/CountryList.csv", names = ('regionCd', 'regionName', 'countryCd', 'countryName'))

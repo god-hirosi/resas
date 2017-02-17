@@ -40,6 +40,22 @@ with open('bot/data/PrefExchangeList.csv') as f:
         P_c2n[c] = n
         P_n2c[n] = c
 
+# 来訪人数辞書
+p2c = {}
+c2p = {}
+with open('bot/data/list_pc.csv') as f:
+    rs = csv.reader(f)
+    for r in rs:
+        p = r[0]
+        c = r[1]
+        v = r[2]
+        if p not in p2c:
+            p2c[p] = {}
+        if c not in c2p:
+            c2p[c] = {}
+        p2c[p][c] = v
+        c2p[c][p] = v
+        
 
 class RtmEventHandler(object):
     def __init__(self, slack_clients, msg_writer):
