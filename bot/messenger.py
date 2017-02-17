@@ -124,7 +124,7 @@ class Messenger(object):
     ## 新規作成関数エリア
     ##############################
     
-    def get_PrefTop2_fromNation(in_nation):
+    def get_PrefTop2_fromNation(in_nation, channel_id):
         #if in_nation not in P_n2c:
             
         countryCode = P_n2c[in_nation]
@@ -136,6 +136,7 @@ class Messenger(object):
             count += 1
             if count == 2:
                 break
+        self.send_message(channel_id, 'We recommend %s Pref. and %s Pref. !' % (cand[0], cand[1]))
         return cand[0], cand[1]
     
     '''

@@ -89,13 +89,15 @@ class RtmEventHandler(object):
                             continue
                         else:
                             in_nation = cn
-                            pref1, pref2 =  self.msg_writer.get_PrefTop2_fromNation(in_nation)
+                            pref1, pref2 =  self.msg_writer.get_PrefTop2_fromNation(in_nation, event['channel'])
                             break
+                    
                     #食べログ: url_tabe = URLが格納されたリスト
                     url_tabe_list = self.msg_writer.get_taberogu_url([pref1, pref2])
                     #あそびゅー
                     url_aso_list = self.msg_writer.get_asoview_url([pref1, pref2])
-                        
+                else:
+                    self.msg_writer.write_prompt(event['channel'])
                 '''
                 elif countryList[countryList['countryName'].str.contains(str(msg_txt))]:
                     self.send_message(event['channel'], "検索しているので、少し待ってね :-)")
@@ -130,8 +132,6 @@ class RtmEventHandler(object):
                     # 情報を提示
                     #
                 '''
-                else:
-                    self.msg_writer.write_prompt(event['channel'])
 
     def _is_direct_message(self, channel):
         """Check if channel is a direct message channel
