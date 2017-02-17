@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-
+import sys
+sys.setdefaultencoding('utf-8')
 import logging
 import random
 import csv

@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-
+import sys
+sys.setdefaultencoding('utf-8')
 import logging
 import os
 
