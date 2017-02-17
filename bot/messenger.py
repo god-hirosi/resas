@@ -151,7 +151,9 @@ class Messenger(object):
         elif v == 2:
             self.send_message(channel_id, 'どこから来たの？どこの国の人？')
         else:
-            continue
+            pass
+    
+    #def write_otherPref
             
     
     # 都道府県コードから食べログで和食・日本料理の検索結果URLを返す
