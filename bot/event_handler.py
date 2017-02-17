@@ -96,7 +96,7 @@ class RtmEventHandler(object):
                             continue
                         else:
                             in_nation = cn
-                            pref1, pref2 =  self.msg_writer.get_PrefTop2_fromNation(in_nation, event['channel'])
+                            prefs =  self.msg_writer.get_PrefTop2_fromNation(in_nation, event['channel'])
                             flag = True
                             break
                     if flag:

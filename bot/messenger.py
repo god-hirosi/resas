@@ -26,14 +26,17 @@ with open('bot/data/CountryList.csv') as f:
 # 都道府県コード
 P_c2n = {}
 P_n2c = {}
+P_c2k = {}
 with open('bot/data/PrefExchangeList.csv') as f:
     f.readline()
     rs = csv.reader(f)
     for r in rs:
         c = r[2]
         n = r[1]
+        k = r[0]
         P_c2n[c] = n
         P_n2c[n] = c
+        P_c2k[c] = k
 
 # 来訪人数辞書
 p2c = {}
@@ -139,8 +142,36 @@ class Messenger(object):
             if count == 2:
                 break
         self.send_message(channel_id, 'We recommend %s Pref. and %s Pref. !' % (P_c2n[cand[0]], P_c2n[cand[1]]))
-        return cand[0], cand[1]
+        return cand
     
+    # 都道府県コードから食べログで和食・日本料理の検索結果URLを返す
+    def get_taberogu_url(self, prefs):
+        urls = []
+        for pref in sorted(set(prefs), key=prefs.index):
+            pn = P_c2n[pref]
+            url = 'https://tabelog.com/' + pn + '/rstLst/lunch/washoku/?sort_mode=1' + \
+                '&sw=%E6%97%A5%E6%9C%AC%E6%96%99%E7%90%86&sk=' +\
+                '%E5%92%8C%E9%A3%9F%20%E6%97%A5%E6%9C%AC%E6%96%99%' + \
+                'E7%90%86%20%E3%83%A9%E3%83%B3%E3%83%81&svd=&svt=&svps=2'  
+            urls.append(url)
+        return urls
+    
+    #  都道府県コードから、あそびゅーで検索結果のURLを返す
+    def get_asoview_url(self, prefs):
+        urls = []
+        for pref in sorted(set(prefs), key=prefs.index):
+            pn = P_c2k[pref]
+            # 以下、主要パラメータ
+            # np=人数(int)
+            # q=都道府県
+            # targetAge=対象年齢(int)
+            # tg=24~28 (int, 24:オールシーズン、 25:春、26:夏、27:秋、28:冬)、複数掛け合わせOK
+            # timeRequired=所要時間(int) (分)
+            # ct=ジャンル(int) (添付写真の上から1〜。ex)7:観光・レジャー )
+            url = 'http://www.asoview.com/search/?ymd=&rg=&ct=7&ac=&np=&q=' + pn + \
+                '&bd=&targetAge=18&timeRequired=180&tg=24&tg=25&tg=26&tg=27&tg=28'
+            urls.append(url)
+        return urls
     '''
     def get_resas(key,url):
         x = json.loads(requests.get('https://opendata.resas-portal.go.jp/' + url, headers={'X-API-KEY':key}).text)
@@ -248,7 +279,7 @@ class Messenger(object):
             i += 1
             j = 0
         return tmp_nation1, tmp_nation2
-    '''
+    
     # 都道府県コードから食べログで和食・日本料理の検索結果URLを返す
     def get_taberogu_url(self, prefCdList):
         url_tabe_list = []
@@ -287,7 +318,7 @@ class Messenger(object):
             url_aso_list[i] = str(url)
             i += 1
         return url_aso_list
-    
+        '''
     
     
     
