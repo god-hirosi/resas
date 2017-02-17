@@ -150,17 +150,17 @@ class Messenger(object):
     
     # 都道府県コードから食べログで和食・日本料理の検索結果URLを返す
     def get_taberogu_url(self, inp, flag, prefs, channel_id):
-        data = []
-        for i in xrange(len(prefs)):
-            pref = prefs[i][0]
-            pn = P_c2n[pref]
-            pk = P_c2k[pref]
-            url = 'https://tabelog.com/' + pn + '/rstLst/lunch/washoku/?sort_mode=1' + \
+        if inp[0] == 'c':
+            data = []
+            for i in xrange(len(prefs)):
+                pref = prefs[i][0]
+                pn = P_c2n[pref]
+                pk = P_c2k[pref]
+                url = 'https://tabelog.com/' + pn + '/rstLst/lunch/washoku/?sort_mode=1' + \
                 '&sw=%E6%97%A5%E6%9C%AC%E6%96%99%E7%90%86&sk=' +\
                 '%E5%92%8C%E9%A3%9F%20%E6%97%A5%E6%9C%AC%E6%96%99%' + \
                 'E7%90%86%20%E3%83%A9%E3%83%B3%E3%83%81&svd=&svt=&svps=2'  
-            data.append([pk, url])
-        if inp[0] == 'c':
+                data.append([pk, url])
             if flag:
                 txt = '%sの人に人気の場所は、%sです！\n'\
                 '%sでのオススメのグルメ店はこちら↓ \n' \
@@ -175,34 +175,39 @@ class Messenger(object):
                 '%s\n\n' \
                 % (data[0][0], data[0][1], data[1][0], data[1][1])
         else:
+            pref = inp[1]
+            pn = P_c2n[pref]
+            url = 'https://tabelog.com/' + pn + '/rstLst/lunch/washoku/?sort_mode=1' + \
+                '&sw=%E6%97%A5%E6%9C%AC%E6%96%99%E7%90%86&sk=' +\
+                '%E5%92%8C%E9%A3%9F%20%E6%97%A5%E6%9C%AC%E6%96%99%' + \
+                'E7%90%86%20%E3%83%A9%E3%83%B3%E3%83%81&svd=&svt=&svps=2' 
             if flag:
                 txt = '%sで食べられる、日本の人気おもてなし料理はこちらから↓' \
                 '%s\n\n' \
-                % (inp[1], data[0][1])
+                % (inp[1], url)
             else:
                 txt = 'また、%sでオススメの、日本のおもてなし料理も試してみてね！' \
                 '%s\n\n' \
-                % (inp[1], data[0][1])
+                % (inp[1], url)
         self.send_message(channel_id, txt.decode('utf-8'))
 
     
     #  都道府県コードから、あそびゅーで検索結果のURLを返す
     def get_asoview_url(self, inp, flag, prefs, channel_id):
-        data = []
-        for i in xrange(len(prefs)):
-            pref = prefs[i][0]
-            pn = P_c2k[pref]
-            # 以下、主要パラメータ
-            # np=人数(int)
-            # q=都道府県
-            # targetAge=対象年齢(int)
-            # tg=24~28 (int, 24:オールシーズン、 25:春、26:夏、27:秋、28:冬)、複数掛け合わせOK
-            # timeRequired=所要時間(int) (分)
-            # ct=ジャンル(int) (添付写真の上から1〜。ex)7:観光・レジャー )
-            url = 'http://www.asoview.com/search/?ymd=&rg=&ct=7&ac=&np=&q=%s&bd=&targetAge=18&timeRequired=180&tg=24&tg=25&tg=26&tg=27&tg=28' % pn.decode('utf-8').encode('utf-8')
-            data.append([pn, url])
-            
         if inp[0] == 'c':
+            data = []
+            for i in xrange(len(prefs)):
+                pref = prefs[i][0]
+                pn = P_c2k[pref]
+                # 以下、主要パラメータ
+                # np=人数(int)
+                # q=都道府県
+                # targetAge=対象年齢(int)
+                # tg=24~28 (int, 24:オールシーズン、 25:春、26:夏、27:秋、28:冬)、複数掛け合わせOK
+                # timeRequired=所要時間(int) (分)
+                # ct=ジャンル(int) (添付写真の上から1〜。ex)7:観光・レジャー )
+                url = 'http://www.asoview.com/search/?ymd=&rg=&ct=7&ac=&np=&q=%s&bd=&targetAge=18&timeRequired=180&tg=24&tg=25&tg=26&tg=27&tg=28' % pn.decode('utf-8').encode('utf-8')
+                data.append([pn, url])
             if flag:
                 txt = '%sの人に人気の場所は、%sです！\n'\
                 '%sでのオススメの思い出作りはコチラから↓\n' \
@@ -217,14 +222,15 @@ class Messenger(object):
                 '%s\n\n' \
                 % (data[0][0], data[0][1], data[1][0], data[1][1])
         else:
+            url = 'http://www.asoview.com/search/?ymd=&rg=&ct=7&ac=&np=&q=%s&bd=&targetAge=18&timeRequired=180&tg=24&tg=25&tg=26&tg=27&tg=28' % inp[1].decode('utf-8').encode('utf-8')
             if flag:
                 txt = '%sではこんな楽しいイベントや体験ができるよ！' \
                 '%s\n\n' \
-                % (inp[1], data[0][1])
+                % (inp[1], url)
             else:
                 txt = 'また、%sではこんな楽しいイベントや体験ができるよ！' \
                 '%s\n\n' \
-                % (inp[1], data[0][1])
+                % (inp[1], url)
         self.send_message(channel_id, txt.decode('utf-8'))
     
     
