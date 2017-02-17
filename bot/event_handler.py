@@ -131,8 +131,8 @@ class RtmEventHandler(object):
             url_aso_list = self.msg_writer.get_asoview_url(self.inp, self.purp_r, self.prefs, event['channel'])
             url_tabe_list = self.msg_writer.get_taberogu_url(self.inp, self.purp_g, self.prefs, event['channel'])
             if self.inp is not None:
-            if self.inp[0] == 'p':
-                self.msg_writer.write_otherPref(self.inp, self.prefs, event['channel'])
+                if self.inp[0] == 'p':
+                    self.msg_writer.write_otherPref(self.inp, self.prefs, event['channel'])
             self.initialize_param()
         else:
             self.msg_writer.purpose_check(event['channel'])
