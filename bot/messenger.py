@@ -12,6 +12,17 @@ logger = logging.getLogger(__name__)
 countryList = pd.read_csv("data/CountryList.csv", names = ('regionCd', 'regionName', 'countryCd', 'countryName'))
 prefList = pd.read_csv("data/PrefExchangeList.csv", names = ('prefName', 'shortName', 'prefCd'))
 
+#参照データ情報
+year = '2015' #対象年
+quarter = '2' #対象クウォーター
+#pref_code = '11'
+region_code = '1' #地域コード
+#country_code = '103'#国コード
+purpose = '1'#目的　１：全て　２：観光
+month = '04' #訪問月
+pot = '1' #訪問時間帯　１：昼　２：夜
+
+
 class Messenger(object):
     def __init__(self, slack_clients):
         self.clients = slack_clients
@@ -184,5 +195,8 @@ class Messenger(object):
         pref_short = prefList[prefList['prefCd'].str.contains(str(prefCd))]['shortName']
         url = 'https://tabelog.com/' + pref_short + '/rstLst/lunch/washoku/?sort_mode=1' + \
         '&sw=%E6%97%A5%E6%9C%AC%E6%96%99%E7%90%86&sk=' +\
-        '%E5%92%8C%E9%A3%9F%20%E6%97%A5%E6%9C%AC%E6%96%99%E7%90%86%20%E3%83%A9%E3%83%B3%E3%83%81&svd=&svt=&svps=2'
+        '%E5%92%8C%E9%A3%9F%20%E6%97%A5%E6%9C%AC%E6%96%99%' + \
+        'E7%90%86%20%E3%83%A9%E3%83%B3%E3%83%81&svd=&svt=&svps=2'
         return url
+    
+    # 
