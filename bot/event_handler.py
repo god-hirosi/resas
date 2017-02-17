@@ -100,13 +100,13 @@ class RtmEventHandler(object):
     
     def suggest(self, event):
         if self.purp_g:
-            url_tabe_list = self.get_taberogu_url(self.inp, self.purp_g, self.prefs, event['channel'])
-            url_aso_list = self.get_asoview_url(self.inp, self.purp_r, self.prefs, event['channel'])
+            url_tabe_list = self.msg_writer.get_taberogu_url(self.inp, self.purp_g, self.prefs, event['channel'])
+            url_aso_list = self.msg_writer.get_asoview_url(self.inp, self.purp_r, self.prefs, event['channel'])
             self.initialize_param()
             
         elif self.purp_r:
-            url_aso_list = self.get_asoview_url(self.inp, self.purp_r, self.prefs, event['channel'])
-            url_tabe_list = self.get_taberogu_url(self.inp, self.purp_g, self.prefs, event['channel'])
+            url_aso_list = self.msg_writer.get_asoview_url(self.inp, self.purp_r, self.prefs, event['channel'])
+            url_tabe_list = self.msg_writer.get_taberogu_url(self.inp, self.purp_g, self.prefs, event['channel'])
             self.initialize_param()
         else:
             self.msg_writer.purpose_check(event['channel'])
@@ -149,6 +149,7 @@ class RtmEventHandler(object):
                 elif 'echo' in msg_txt:
                     self.msg_writer.send_message(event['channel'], msg_txt)
                 elif msg_txt is not None:
+                    print self.inp, self.prefs, self.purp_g, self.purp_r
                     if 'グルメ' in msg_txt:
                         if len(self.prefs) == 0:
                             self.purp_g = True
