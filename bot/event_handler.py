@@ -98,7 +98,7 @@ class RtmEventHandler(object):
         self.purp_r = False
         
     
-    def suggest(self):
+    def suggest(self, event):
         if self.purp_g:
             url_tabe_list = self.get_taberogu_url(self.inp, self.purp_g, self.prefs, event['channel'])
             url_aso_list = self.get_asoview_url(self.inp, self.purp_r, self.prefs, event['channel'])
@@ -178,7 +178,7 @@ class RtmEventHandler(object):
                                 self.prefs = self.msg_writer.get_PrefTop2_fromNation(nations, event['channel'])
                                 self.inp = ['p', pn]
                                 break
-                    self.suggest()
+                    self.suggest(event)
                 else:
                     self.msg_writer.write_prompt(event['channel'])
                 '''
