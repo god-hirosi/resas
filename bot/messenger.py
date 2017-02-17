@@ -36,7 +36,7 @@ with open('bot/data/PrefExchangeList.csv') as f:
 # 来訪人数辞書
 p2c = {}
 c2p = {}
-with open('bot/data/list_pc.csv'):
+with open('bot/data/list_pc.csv') as f:
     rs = csv.reader(f)
     for r in rs:
         p = r[0]
