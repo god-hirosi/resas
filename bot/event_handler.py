@@ -191,7 +191,7 @@ class RtmEventHandler(object):
                                 continue
                             else:
                                 pref = pn
-                                nations = get_NationTop2_fromPref(pref)
+                                nations = self.get_NationTop2_fromPref(pref)
                                 self.get_PrefTop2_fromNation(nations)
                                 self.inp = ['p', pn]
                                 break
