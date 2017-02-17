@@ -133,7 +133,7 @@ class Messenger(object):
     ##############################
     
     def purpose_check(self, channel_id):
-        self.send_message(channel_id, '何を調べたい？ グルメ or 体験から選んでね！')
+        self.send_message(channel_id, '何を調べたい？ グルメ or 体験から選んでね！'.decode('utf-8'))
     
     
     def write_initial(self, purpose, channel_id):
@@ -147,9 +147,9 @@ class Messenger(object):
         '''
             
         if v == 1:
-            self.send_message(channel_id, 'どこに行くの？何県？')
+            self.send_message(channel_id, 'どこに行くの？何県？'.decode('utf-8'))
         elif v == 2:
-            self.send_message(channel_id, 'どこから来たの？どこの国の人？')
+            self.send_message(channel_id, 'どこから来たの？どこの国の人？'.decode('utf-8'))
         else:
             pass
     
@@ -191,7 +191,7 @@ class Messenger(object):
                 txt = 'また、%sでオススメの、日本のおもてなし料理も試してみてね！' \
                 '%s\n\n' \
                 % (inp[1], data[0][1])
-        self.send_message(channel_id, txt)
+        self.send_message(channel_id, txt.decode('utf-8'))
 
     
     #  都道府県コードから、あそびゅーで検索結果のURLを返す
@@ -232,7 +232,7 @@ class Messenger(object):
                 txt = 'また、%sではこんな楽しいイベントや体験ができるよ！' \
                 '%s\n\n' \
                 % (inp[1], data[0][1])
-        self.send_message(channel_id, txt)
+        self.send_message(channel_id, txt.decode('utf-8'))
     
     
     
