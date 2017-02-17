@@ -129,7 +129,7 @@ class Messenger(object):
     def get_PrefTop2_fromNation(self, in_nation, channel_id):
         #if in_nation not in P_n2c:
             
-        countryCode = P_n2c[in_nation]
+        countryCode = C_n2c[in_nation]
         res = c2p[countryCode]
         count = 0
         cand = []
