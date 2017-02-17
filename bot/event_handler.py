@@ -120,7 +120,9 @@ class RtmEventHandler(object):
         
     
     def suggest(self, event):
-        if self.purp_g:
+        if len(self.prefs) == 0:
+            self.msg_writer.write_initial(True, event['channel'])
+        elif self.purp_g:
             url_tabe_list = self.msg_writer.get_taberogu_url(self.inp, self.purp_g, self.prefs, event['channel'])
             url_aso_list = self.msg_writer.get_asoview_url(self.inp, self.purp_r, self.prefs, event['channel'])
             if self.inp is not None:
@@ -178,22 +180,16 @@ class RtmEventHandler(object):
                 elif msg_txt is not None:
                     if 'グルメ' in msg_txt:
                         self.purp_g = True
-                        if len(self.prefs) == 0:
-                            self.msg_writer.write_initial(True, event['channel'])
-                            return
                     elif '体験' in msg_txt:
                         self.purp_r = True
-                        if len(self.prefs) == 0:
-                            self.msg_writer.write_initial(True, event['channel'])
-                            return
                     else:
                         for cn in C_n2c:
                             if cn not in msg_txt:
                                 continue
                             else:
                                 nation = cn
-                                self.get_PrefTop2_fromNation([nation])
                                 self.inp = ['c', cn]
+                                self.get_PrefTop2_fromNation([nation])
                                 break
 
                         for pn in P_k2c:
