@@ -40,17 +40,82 @@ with open('bot/data/PrefExchangeList.csv') as f:
         P_c2n[c] = n
         P_n2c[n] = c
 
+inp = None
+prefs = []
+purp_g = False
+purp_r = False
+
 
 class RtmEventHandler(object):
     def __init__(self, slack_clients, msg_writer):
         self.clients = slack_clients
         self.msg_writer = msg_writer
 
+        
     def handle(self, event):
 
         if 'type' in event:
             self._handle_by_type(event['type'], event)
+            
+            
+    def get_PrefTop2_fromNation(self, nations):
+        #if in_nation not in P_n2c:
+        cand = []
+        for nation in nations:
+            countryCode = C_n2c[nation]
+            res = c2p[countryCode]
+            count = 0
+            for p, v in sorted(res.items(), key=lambda x: x[1], reverse=True):
+                cand.append([p, v])
+                count += 1
+                if count == 2:
+                    break
+        count = 0
+        prefs = {}
+        for p, v in sorted(cand.items(), key=lambda x: x[1], reverse=True):
+            if p in prefs:
+                continue
+            prefs[p] = v
+            count += 1
+            if count == 2:
+                break
+        return prefs
+   
 
+    def get_NationTop2_fromPref(self, pref):
+        prefCode = P_k2c[pref]
+        res = p2c[prefCode]
+        count = 0
+        cand = []
+        for p, v in sorted(res.items(), key=lambda x: x[1], reverse=True):
+            cand.append(p)
+            count += 1
+            if count == 2:
+                break
+        return cand
+    
+    def initialize_param(self):
+        inp = None
+        prefs = []
+        purp_g = False
+        purp_r = False
+        
+    
+    def suggest(self, inp, prefs, purp_g, purp_r):
+        if purp_g:
+            url_tabe_list = self.get_taberogu_url(inp, purp_g, prefs, event['channel'])
+            url_aso_list = self.get_asoview_url(inp, purp_r, prefs, event['channel'])
+            initialize_param()
+            continue            
+            
+        elif purp_r:
+            url_aso_list = self.get_asoview_url(inp, purp_r, prefs, event['channel'])
+            url_tabe_list = self.get_taberogu_url(inp, purp_g, prefs, event['channel'])
+            initialize_param()
+            continue            
+        
+        self.msg_writer.purpose_check(event['channel'])
+    
     def _handle_by_type(self, event_type, event):
         # See https://api.slack.com/rtm for a full list of events
         if event_type == 'error':
@@ -88,31 +153,37 @@ class RtmEventHandler(object):
                     self.msg_writer.demo_attachment(event['channel'])
                 elif 'echo' in msg_txt:
                     self.msg_writer.send_message(event['channel'], msg_txt)
-                # 国籍を入力されたら、その国籍に人気の都道府県Top2を取得し、情報を推薦する
                 elif msg_txt is not None:
-                    flag = False
-                    for cn in C_n2c:
-                        if cn not in msg_txt:
+                    if 'グルメ' in msg_txt:
+                        if len(prefs) == 0:
+                            purp_g = True
+                            self.msg_writer.write_initial(True, event['channel'])
                             continue
-                        else:
-                            in_nation = cn
-                            prefs =  self.msg_writer.get_PrefTop2_fromNation(in_nation, event['channel'])
-                            flag = True
-                            break
-                    if flag:
-                        #食べログ: url_tabe = URLが格納されたリスト
-                        url_tabe_list = self.msg_writer.get_taberogu_url(prefs, event['channel'])
-                        #あそびゅー
-                        url_aso_list = self.msg_writer.get_asoview_url(prefs, event['channel'])
-                    # 目的はと聞いて、グルメと言われたら食べログを出して、体験と言われたらあそびゅーからいれる。
-                    '''
-                    for pn in P_n2c:
-                        if pn not in msg_txt:
+                    elif '思い出' in msg_txt:
+                        if len(prefs) == 0:
+                            purp_r = True
+                            self.msg_writer.write_initial(True, event['channel'])
                             continue
-                        else:
-                            pref = pn
-                            nations = get_NationTop2_fromPref(pref)
-                    '''
+                    else:
+                        for cn in C_n2c:
+                            if cn not in msg_txt:
+                                continue
+                            else:
+                                nation = cn
+                                prefs =  self.msg_writer.get_PrefTop2_fromNation([nation], event['channel'])
+                                inp = ['c', cn]
+                                break
+
+                        for pn in P_n2c:
+                            if pn not in msg_txt:
+                                continue
+                            else:
+                                pref = pn
+                                nations = get_NationTop2_fromPref(pref)
+                                prefs = self.msg_writer.get_PrefTop2_fromNation(nations, event['channel'])
+                                inp = ['p', pn]
+                                break
+                    self.suggest(inp, prefs, purp_g, purp_r)
                 else:
                     self.msg_writer.write_prompt(event['channel'])
                 '''

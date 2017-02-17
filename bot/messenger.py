@@ -7,6 +7,7 @@ import random
 import csv
 import os
 print os.getcwd()
+import random
 # import pandas as pd
 
 logger = logging.getLogger(__name__)
@@ -27,6 +28,7 @@ with open('bot/data/CountryList.csv') as f:
 P_c2n = {}
 P_n2c = {}
 P_c2k = {}
+P_k2c = {}
 with open('bot/data/PrefExchangeList.csv') as f:
     f.readline()
     rs = csv.reader(f)
@@ -37,6 +39,7 @@ with open('bot/data/PrefExchangeList.csv') as f:
         P_c2n[c] = n
         P_n2c[n] = c
         P_c2k[c] = k
+        P_k2c[k] = c
 
 # 来訪人数辞書
 p2c = {}
@@ -129,39 +132,68 @@ class Messenger(object):
     ## 新規作成関数エリア
     ##############################
     
-    def get_PrefTop2_fromNation(self, in_nation, channel_id):
-        #if in_nation not in P_n2c:
+    def purpose_check(self, channel_id):
+        self.send_message(channel_id, '何を調べたい？ グルメ or 体験から選んでね！')
+    
+    
+    def write_initial(self, purpose, channel_id):
+        # 目的が決まっている場合は必ず聞く。
+        v = random.randint(1, 2)
+        '''
+        if purpose:
+            v = random.randint(1, 2)
+        else:
+            v = random.randint(1, 3)
+        '''
             
-        countryCode = C_n2c[in_nation]
-        res = c2p[countryCode]
-        count = 0
-        cand = []
-        for p, v in sorted(res.items(), key=lambda x: x[1], reverse=True):
-            cand.append(p)
-            count += 1
-            if count == 2:
-                break
-        self.send_message(channel_id, 'We recommend %s Pref. and %s Pref. !' % (P_c2n[cand[0]], P_c2n[cand[1]]))
-        return cand
-   
-    #def get_NationTop2_fromPref(self, 
+        if v == 1:
+            self.send_message(channel_id, 'どこに行くの？何県？')
+        elif v == 2:
+            self.send_message(channel_id, 'どこから来たの？どこの国の人？')
+        else:
+            continue
+            
     
     # 都道府県コードから食べログで和食・日本料理の検索結果URLを返す
-    def get_taberogu_url(self, prefs, channel_id):
-        urls = []
+    def get_taberogu_url(self, inp, flag_g, prefs, channel_id):
+        data = []
         for pref in sorted(set(prefs), key=prefs.index):
             pn = P_c2n[pref]
+            pk = P_c2k[pref]
             url = 'https://tabelog.com/' + pn + '/rstLst/lunch/washoku/?sort_mode=1' + \
                 '&sw=%E6%97%A5%E6%9C%AC%E6%96%99%E7%90%86&sk=' +\
                 '%E5%92%8C%E9%A3%9F%20%E6%97%A5%E6%9C%AC%E6%96%99%' + \
                 'E7%90%86%20%E3%83%A9%E3%83%B3%E3%83%81&svd=&svt=&svps=2'  
-            urls.append(url)
-            self.send_message(channel_id, '%s' % (url))
-        return urls
+            data.append([pk, url])
+        if inp[0] = 'c':
+            if flag_g:
+                txt = '%sの人に人気の場所は、%sです！\n'\
+                '%sでのオススメのグルメ店はこちら↓ \n' \
+                '%s\n\n'
+                'また、他にも%sも人気で、オススメのグルメ店はこちらから！\n'
+                '%s\n\n' \
+                % (inp[1], data[0][0], data[0][0], data[0][1], data[1][0], data[1][1])
+            else:
+                txt = 'ちなみに%sでのオススメのグルメ店はこちら↓！\n'\
+                '%s\n\n'
+                '%sでのオススメのグルメ店はこちら！\n'
+                '%s\n\n' \
+                % (data[0][0], data[0][1], data[1][0], data[1][1])
+        else:
+            if flag_g:
+                txt = '%sで食べられる、日本の人気おもてなし料理はこちらから↓' \
+                '%s\n\n' \
+                % (inp[1], data[0][1])
+            else:
+                txt = 'また、%sでオススメの、日本のおもてなし料理も試してみてね！' \
+                '%s\n\n' \
+                % (inp[1], data[0][1])
+        self.send_message(channel_id, txt)
+
     
     #  都道府県コードから、あそびゅーで検索結果のURLを返す
-    def get_asoview_url(self, prefs, channel_id):
-        urls = []
+    def get_asoview_url(self, inp, prefs, channel_id):
+        data = []
         for pref in sorted(set(prefs), key=prefs.index):
             pn = P_c2k[pref]
             # 以下、主要パラメータ
@@ -172,9 +204,40 @@ class Messenger(object):
             # timeRequired=所要時間(int) (分)
             # ct=ジャンル(int) (添付写真の上から1〜。ex)7:観光・レジャー )
             url = 'http://www.asoview.com/search/?ymd=&rg=&ct=7&ac=&np=&q=%s&bd=&targetAge=18&timeRequired=180&tg=24&tg=25&tg=26&tg=27&tg=28' % pn.decode('utf-8')
-            urls.append(url)
-            self.send_message(channel_id, '%s' % (url))
-        return urls
+            data.append([pn, url])
+            
+        if inp[0] = 'c':
+            if flag_g:
+                txt = '%sの人に人気の場所は、%sです！\n'\
+                '%sでのオススメの思い出作りはコチラから↓\n' \
+                '%s\n\n'
+                'また、他にも%sが人気で、こんなことがオススメ！\n'
+                '%s\n\n' \
+                % (inp[1], data[0][0], data[0][0], data[0][1], data[1][0], data[1][1])
+            else:
+                txt = 'ちなみに%s”ではこんな楽しい思い出作りができるよ！\n'\
+                '%s\n\n'
+                '%sの人気イベント・体験も見てね！\n'
+                '%s\n\n' \
+                % (data[0][0], data[0][1], data[1][0], data[1][1])
+        else:
+            if flag_g:
+                txt = '%sではこんな楽しいイベントや体験ができるよ！' \
+                '%s\n\n' \
+                % (inp[1], data[0][1])
+            else:
+                txt = 'また、%sではこんな楽しいイベントや体験ができるよ！' \
+                '%s\n\n' \
+                % (inp[1], data[0][1])
+        self.send_message(channel_id, txt)
+    
+    
+    
+    
+    
+    
+    
+    
     '''
     def get_resas(key,url):
         x = json.loads(requests.get('https://opendata.resas-portal.go.jp/' + url, headers={'X-API-KEY':key}).text)
