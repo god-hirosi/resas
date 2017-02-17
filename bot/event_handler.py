@@ -31,7 +31,7 @@ with open('bot/data/CountryList.csv') as f:
 # 都道府県コード
 P_c2n = {}
 P_n2c = {}
-P_k2c = [}
+P_k2c = {}
 with open('bot/data/PrefExchangeList.csv') as f:
     f.readline()
     rs = csv.reader(f)
