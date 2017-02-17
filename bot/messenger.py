@@ -153,7 +153,8 @@ class Messenger(object):
         else:
             pass
     
-    #def write_otherPref
+    def write_otherPref(self, prefs, channel_id):
+        pass
             
     
     # 都道府県コードから食べログで和食・日本料理の検索結果URLを返す
