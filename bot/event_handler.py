@@ -75,20 +75,18 @@ class RtmEventHandler(object):
             
     def get_PrefTop2_fromNation(self, nations):
         #if in_nation not in P_n2c:
-        cand = []
+        cand = {}
         for nation in nations:
             countryCode = C_n2c[nation]
             res = c2p[countryCode]
             count = 0
             for p, v in sorted(res.items(), key=lambda x: x[1], reverse=True):
-                cand.append([p, v])
+                cand[p] = v
                 count += 1
                 if count == 2:
                     break
         count = 0
         for p, v in sorted(cand.items(), key=lambda x: x[1], reverse=True):
-            if p in prefs:
-                continue
             self.prefs[p] = v
             count += 1
             if count == 2:
