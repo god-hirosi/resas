@@ -165,7 +165,7 @@ class Messenger(object):
                 '%E5%92%8C%E9%A3%9F%20%E6%97%A5%E6%9C%AC%E6%96%99%' + \
                 'E7%90%86%20%E3%83%A9%E3%83%B3%E3%83%81&svd=&svt=&svps=2'  
             data.append([pk, url])
-        if inp[0] = 'c':
+        if inp[0] == 'c':
             if flag_g:
                 txt = '%sの人に人気の場所は、%sです！\n'\
                 '%sでのオススメのグルメ店はこちら↓ \n' \
@@ -206,7 +206,7 @@ class Messenger(object):
             url = 'http://www.asoview.com/search/?ymd=&rg=&ct=7&ac=&np=&q=%s&bd=&targetAge=18&timeRequired=180&tg=24&tg=25&tg=26&tg=27&tg=28' % pn.decode('utf-8')
             data.append([pn, url])
             
-        if inp[0] = 'c':
+        if inp[0] == 'c':
             if flag_g:
                 txt = '%sの人に人気の場所は、%sです！\n'\
                 '%sでのオススメの思い出作りはコチラから↓\n' \
