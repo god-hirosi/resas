@@ -147,7 +147,7 @@ class Messenger(object):
             
     
     # 都道府県コードから食べログで和食・日本料理の検索結果URLを返す
-    def get_taberogu_url(self, inp, flag_g, prefs, channel_id):
+    def get_taberogu_url(self, inp, flag, prefs, channel_id):
         data = []
         for i in xrange(len(prefs)):
             pref = prefs[i][0]
@@ -159,7 +159,7 @@ class Messenger(object):
                 'E7%90%86%20%E3%83%A9%E3%83%B3%E3%83%81&svd=&svt=&svps=2'  
             data.append([pk, url])
         if inp[0] == 'c':
-            if flag_g:
+            if flag:
                 txt = '%sの人に人気の場所は、%sです！\n'\
                 '%sでのオススメのグルメ店はこちら↓ \n' \
                 '%s\n\n' \
@@ -173,7 +173,7 @@ class Messenger(object):
                 '%s\n\n' \
                 % (data[0][0], data[0][1], data[1][0], data[1][1])
         else:
-            if flag_g:
+            if flag:
                 txt = '%sで食べられる、日本の人気おもてなし料理はこちらから↓' \
                 '%s\n\n' \
                 % (inp[1], data[0][1])
@@ -185,7 +185,7 @@ class Messenger(object):
 
     
     #  都道府県コードから、あそびゅーで検索結果のURLを返す
-    def get_asoview_url(self, inp, prefs, channel_id):
+    def get_asoview_url(self, inp, flag, prefs, channel_id):
         data = []
         for i in xrange(len(prefs)):
             pref = prefs[i][0]
@@ -201,7 +201,7 @@ class Messenger(object):
             data.append([pn, url])
             
         if inp[0] == 'c':
-            if flag_g:
+            if flag:
                 txt = '%sの人に人気の場所は、%sです！\n'\
                 '%sでのオススメの思い出作りはコチラから↓\n' \
                 '%s\n\n' \
@@ -215,7 +215,7 @@ class Messenger(object):
                 '%s\n\n' \
                 % (data[0][0], data[0][1], data[1][0], data[1][1])
         else:
-            if flag_g:
+            if flag:
                 txt = '%sではこんな楽しいイベントや体験ができるよ！' \
                 '%s\n\n' \
                 % (inp[1], data[0][1])
