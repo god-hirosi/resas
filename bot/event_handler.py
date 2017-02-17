@@ -164,13 +164,13 @@ class RtmEventHandler(object):
                     self.msg_writer.send_message(event['channel'], msg_txt)
                 elif msg_txt is not None:
                     if 'グルメ' in msg_txt:
+                        self.purp_g = True
                         if len(self.prefs) == 0:
-                            self.purp_g = True
                             self.msg_writer.write_initial(True, event['channel'])
                             return
                     elif '思い出' in msg_txt:
+                        self.purp_r = True
                         if len(self.prefs) == 0:
-                            self.purp_r = True
                             self.msg_writer.write_initial(True, event['channel'])
                             return
                     else:
