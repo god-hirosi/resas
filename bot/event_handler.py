@@ -2,6 +2,9 @@
 import json
 import logging
 import re
+import requests
+import pandas as pd
+from pandas import DataFrame
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +57,10 @@ class RtmEventHandler(object):
                     self.msg_writer.demo_attachment(event['channel'])
                 elif 'echo' in msg_txt:
                     self.msg_writer.send_message(event['channel'], msg_txt)
-                #elif '国籍' in msg_txt | 'Country' in msg_txt:
+                # 国籍を入力された場合
+                elif countryList['countryName'].str.contains(str(msg_text)):
+                    # 国籍から
+                    self.
                 #	self.msg_writer.send_syori(event['channel'] msg_txt)
                 else:
                     self.msg_writer.write_prompt(event['channel'])
