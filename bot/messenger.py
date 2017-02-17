@@ -142,8 +142,10 @@ class Messenger(object):
         else:
             pass
     
-    def write_otherPref(self, prefs, channel_id):
-        pass
+    def write_otherPref(self, inp, prefs, channel_id):
+        txt = 'また、%sによく行く人は、%sや%sにもよく行っているよ！\n気になったら調べてみてね！' \
+                % (inp[1], P_c2k[prefs[0][0]], P_c2k[prefs[1][0]])
+        self.send_message(channel_id, txt.decode('utf-8'))
             
     
     # 都道府県コードから食べログで和食・日本料理の検索結果URLを返す
