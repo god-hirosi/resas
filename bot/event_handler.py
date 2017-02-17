@@ -163,7 +163,6 @@ class RtmEventHandler(object):
                 elif 'echo' in msg_txt:
                     self.msg_writer.send_message(event['channel'], msg_txt)
                 elif msg_txt is not None:
-                    self.msg_writer.write_param(self.inp, self.prefs, self.purp_r, self.purp_g, event['channel']) 
                     if 'グルメ' in msg_txt:
                         if len(self.prefs) == 0:
                             self.purp_g = True
@@ -180,7 +179,7 @@ class RtmEventHandler(object):
                                 continue
                             else:
                                 nation = cn
-                                self.prefs =  self.get_PrefTop2_fromNation([nation])
+                                self.get_PrefTop2_fromNation([nation])
                                 self.inp = ['c', cn]
                                 break
 
@@ -190,12 +189,13 @@ class RtmEventHandler(object):
                             else:
                                 pref = pn
                                 nations = get_NationTop2_fromPref(pref)
-                                self.prefs = self.get_PrefTop2_fromNation(nations)
+                                self.get_PrefTop2_fromNation(nations)
                                 self.inp = ['p', pn]
                                 break
                     self.suggest(event)
                 else:
                     self.msg_writer.write_prompt(event['channel'])
+                self.msg_writer.write_param(self.inp, self.prefs, self.purp_r, self.purp_g, event['channel']) 
                 '''
                 elif countryList[countryList['countryName'].str.contains(str(msg_txt))]:
                     self.send_message(event['channel'], "検索しているので、少し待ってね :-)")
