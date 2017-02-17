@@ -37,11 +37,11 @@ with open('bot/data/PrefExchangeList.csv') as f:
     rs = csv.reader(f)
     for r in rs:
         k = r[0]
-        c = r[1]
-        n = r[2]
+        n = r[1]
+        c = r[2]
         P_c2n[c] = n
         P_n2c[n] = c
-        P_k2c[k] = n
+        P_k2c[k] = c
 
 # 来訪人数辞書
 p2c = {}
@@ -101,8 +101,8 @@ class RtmEventHandler(object):
         res = p2c[prefCode]
         count = 0
         cand = []
-        for p, v in sorted(res.items(), key=lambda x: x[1], reverse=True):
-            cand.append(p)
+        for c, v in sorted(res.items(), key=lambda x: x[1], reverse=True):
+            cand.append(C_c2n[c])
             count += 1
             if count == 2:
                 break
