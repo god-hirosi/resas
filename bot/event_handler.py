@@ -104,7 +104,7 @@ class RtmEventHandler(object):
             url_aso_list = self.get_asoview_url(self.inp, self.purp_r, self.prefs, event['channel'])
             self.initialize_param()
             
-        elif purp_r:
+        elif self.purp_r:
             url_aso_list = self.get_asoview_url(self.inp, self.purp_r, self.prefs, event['channel'])
             url_tabe_list = self.get_taberogu_url(self.inp, self.purp_g, self.prefs, event['channel'])
             self.initialize_param()
