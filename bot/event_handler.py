@@ -156,12 +156,12 @@ class RtmEventHandler(object):
                         if len(prefs) == 0:
                             purp_g = True
                             self.msg_writer.write_initial(True, event['channel'])
-                            continue
+                            return
                     elif '思い出' in msg_txt:
                         if len(prefs) == 0:
                             purp_r = True
                             self.msg_writer.write_initial(True, event['channel'])
-                            continue
+                            return
                     else:
                         for cn in C_n2c:
                             if cn not in msg_txt:
