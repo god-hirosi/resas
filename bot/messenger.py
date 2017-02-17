@@ -176,7 +176,7 @@ class Messenger(object):
                 % (data[0][0], data[0][1], data[1][0], data[1][1])
         else:
             pref = inp[1]
-            pn = P_c2n[pref]
+            pn = P_c2n[P_k2c[pref]]
             url = 'https://tabelog.com/' + pn + '/rstLst/lunch/washoku/?sort_mode=1' + \
                 '&sw=%E6%97%A5%E6%9C%AC%E6%96%99%E7%90%86&sk=' +\
                 '%E5%92%8C%E9%A3%9F%20%E6%97%A5%E6%9C%AC%E6%96%99%' + \
