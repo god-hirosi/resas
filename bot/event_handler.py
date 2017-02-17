@@ -166,7 +166,7 @@ class RtmEventHandler(object):
                                 continue
                             else:
                                 nation = cn
-                                self.prefs =  self.msg_writer.get_PrefTop2_fromNation([nation], event['channel'])
+                                self.prefs =  self.get_PrefTop2_fromNation([nation], event['channel'])
                                 self.inp = ['c', cn]
                                 break
 
@@ -176,7 +176,7 @@ class RtmEventHandler(object):
                             else:
                                 pref = pn
                                 nations = get_NationTop2_fromPref(pref)
-                                self.prefs = self.msg_writer.get_PrefTop2_fromNation(nations, event['channel'])
+                                self.prefs = self.get_PrefTop2_fromNation(nations, event['channel'])
                                 self.inp = ['p', pn]
                                 break
                     self.suggest(event)
