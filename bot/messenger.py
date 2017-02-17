@@ -191,12 +191,44 @@ class Messenger(object):
         return tmp_nation1, tmp_nation2
     
     # 都道府県コードから食べログで和食・日本料理の検索結果URLを返す
-    def get_taberogu_url(prefCd):
-        pref_short = prefList[prefList['prefCd'].str.contains(str(prefCd))]['shortName']
-        url = 'https://tabelog.com/' + pref_short + '/rstLst/lunch/washoku/?sort_mode=1' + \
-        '&sw=%E6%97%A5%E6%9C%AC%E6%96%99%E7%90%86&sk=' +\
-        '%E5%92%8C%E9%A3%9F%20%E6%97%A5%E6%9C%AC%E6%96%99%' + \
-        'E7%90%86%20%E3%83%A9%E3%83%B3%E3%83%81&svd=&svt=&svps=2'
-        return url
+    def get_taberogu_url(prefCdList):
+        url_tabe_list = []
+        for pref_ in prefCdList:
+            if (pref_ not in url_tabe_list) and str(pref_) != '0':
+                url_tabe_list.append(str(pref_))
+        i = 0
+        while i < len(url_tabe_list):
+            pref_short = str(prefList[prefList['prefCd'].str.contains(str(url_tabe_list[i]))]['shortName'])
+            url = 'https://tabelog.com/' + pref_short + '/rstLst/lunch/washoku/?sort_mode=1' + \
+                '&sw=%E6%97%A5%E6%9C%AC%E6%96%99%E7%90%86&sk=' +\
+                '%E5%92%8C%E9%A3%9F%20%E6%97%A5%E6%9C%AC%E6%96%99%' + \
+                'E7%90%86%20%E3%83%A9%E3%83%B3%E3%83%81&svd=&svt=&svps=2'            
+            url_tabe_list[i] = str(url)
+            i += 1
+        return url_tabe_list
     
-    # 
+    #  都道府県コードから、あそびゅーで検索結果のURLを返す
+    def get_asoview_url(prefCdList):
+        url_aso_list = []
+        for pref_ in prefCdList:
+            if (pref_ not in url_aso_list) and str(pref_) != '0':
+                url_aso_list.append(str(pref_))
+        i = 0
+        while i < len(url_aso_list):
+            pref_name = str(prefList[prefList['prefCd'].str.contains(str(url_aso_list[i]))]['prefName'])
+            # 以下、主要パラメータ
+            # np=人数(int)
+            # q=都道府県
+            # targetAge=対象年齢(int)
+            # tg=24~28 (int, 24:オールシーズン、 25:春、26:夏、27:秋、28:冬)、複数掛け合わせOK
+            # timeRequired=所要時間(int) (分)
+            # ct=ジャンル(int) (添付写真の上から1〜。ex)7:観光・レジャー )
+            url = 'http://www.asoview.com/search/?ymd=&rg=&ct=7&ac=&np=&q=' + pref_name + \
+                '&bd=&targetAge=18&timeRequired=180&tg=24&tg=25&tg=26&tg=27&tg=28'
+            url_aso_list[i] = str(url)
+            i += 1
+        return url_aso_list
+    
+    
+    
+    
