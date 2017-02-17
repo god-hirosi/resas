@@ -41,7 +41,7 @@ with open('bot/data/PrefExchangeList.csv') as f:
         n = r[2]
         P_c2n[c] = n
         P_n2c[n] = c
-        P_k2c[k] = c
+        P_k2c[k] = n
 
 # 来訪人数辞書
 p2c = {}
