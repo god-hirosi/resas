@@ -149,7 +149,8 @@ class Messenger(object):
     # 都道府県コードから食べログで和食・日本料理の検索結果URLを返す
     def get_taberogu_url(self, inp, flag_g, prefs, channel_id):
         data = []
-        for pref in sorted(set(prefs), key=prefs.index):
+        for i in xrange(len(prefs)):
+            pref = prefs[i][0]
             pn = P_c2n[pref]
             pk = P_c2k[pref]
             url = 'https://tabelog.com/' + pn + '/rstLst/lunch/washoku/?sort_mode=1' + \
@@ -186,7 +187,8 @@ class Messenger(object):
     #  都道府県コードから、あそびゅーで検索結果のURLを返す
     def get_asoview_url(self, inp, prefs, channel_id):
         data = []
-        for pref in sorted(set(prefs), key=prefs.index):
+        for i in xrange(len(prefs)):
+            pref = prefs[i][0]
             pn = P_c2k[pref]
             # 以下、主要パラメータ
             # np=人数(int)

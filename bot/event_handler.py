@@ -62,7 +62,7 @@ class RtmEventHandler(object):
         self.clients = slack_clients
         self.msg_writer = msg_writer
         self.inp = None
-        self.prefs = {}
+        self.prefs = []
         self.purp_g = False
         self.purp_r = False
 
@@ -87,7 +87,7 @@ class RtmEventHandler(object):
                     break
         count = 0
         for p, v in sorted(cand.items(), key=lambda x: x[1], reverse=True):
-            self.prefs[p] = v
+            self.prefs.append([p, v])
             count += 1
             if count == 2:
                 break
