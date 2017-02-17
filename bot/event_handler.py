@@ -3,14 +3,38 @@ import json
 import logging
 import re
 import requests
-import pandas as pd
-from pandas import DataFrame
+#import pandas as pd
+#from pandas import DataFrame
 
 logger = logging.getLogger(__name__)
 
 # 国籍と都道府県の名前とコード変換リストを読み込み
-countryList = pd.read_csv("data/CountryList.csv", names = ('regionCd', 'regionName', 'countryCd', 'countryName'))
-prefList = pd.read_csv("data/PrefExchangeList.csv", names = ('prefName', 'shortName', 'prefCd'))
+#countryList = pd.read_csv("data/CountryList.csv", names = ('regionCd', 'regionName', 'countryCd', 'countryName'))
+#prefList = pd.read_csv("data/PrefExchangeList.csv", names = ('prefName', 'shortName', 'prefCd'))
+
+# 国籍コード
+C_c2n = {}
+C_n2c = {}
+with open('data/CountryList.csv') as f:
+    f.readline()
+    rs = csv.reader(f)
+    for r in rs:
+        c = r[2]
+        n = r[3]
+        C_c2n[c] = n
+        C_n2c[n] = c
+
+# 都道府県コード
+P_c2n = {}
+P_n2c = {}
+with open('data/PrefExchangeList.csv') as f:
+    f.readline()
+    rs = csv.reader(f)
+    for r in rs:
+        c = r[1]
+        n = r[2]
+        P_c2n[c] = n
+        P_n2c[n] = c
 
 
 class RtmEventHandler(object):
@@ -59,9 +83,24 @@ class RtmEventHandler(object):
                 elif 'echo' in msg_txt:
                     self.msg_writer.send_message(event['channel'], msg_txt)
                 # 国籍を入力されたら、その国籍に人気の都道府県Top2を取得し、情報を推薦する
+                elif:
+                    for cn in C_n2c:
+                        if cn not in msg_txt:
+                            continue
+                        else:
+                            in_nation = cn
+                            pref1, pref2 =  self.msg_writer.get_PrefTop2_fromNation(in_nation)
+                            break
+                    #食べログ: url_tabe = URLが格納されたリスト
+                    url_tabe_list = self.msg_writer.get_taberogu_url([pref1, pref2])
+                    #あそびゅー
+                    url_aso_list = self.msg_writer.get_asoview_url([pref1, pref2])
+                        
+                '''
                 elif countryList[countryList['countryName'].str.contains(str(msg_txt))]:
                     self.send_message(event['channel'], "検索しているので、少し待ってね :-)")
                     # 国籍から都道府県Top2のコードを取得
+                        
                     in_nation = countryList[countryList['countryName'].str.contains(str(msg_txt))]['countryName']
                     pref1, pref2 = get_PrefTop2_fromNation(in_nation)
                     self.send_message(event['channel'], "あと少し待ってね :-)")
@@ -90,6 +129,7 @@ class RtmEventHandler(object):
                     url_aso_list = get_asoview_url([pref0, pref3, pref4, pref5, pref6])
                     # 情報を提示
                     #
+                '''
                 else:
                     self.msg_writer.write_prompt(event['channel'])
 

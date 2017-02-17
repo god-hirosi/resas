@@ -2,15 +2,54 @@
 
 import logging
 import random
-import requests
-import pandas as pd
-from pandas import DataFrame
+import csv
+# import pandas as pd
 
 logger = logging.getLogger(__name__)
 
+# 国籍コード
+C_c2n = {}
+C_n2c = {}
+with open('data/CountryList.csv') as f:
+    f.readline()
+    rs = csv.reader(f)
+    for r in rs:
+        c = r[2]
+        n = r[3]
+        C_c2n[c] = n
+        C_n2c[n] = c
+
+# 都道府県コード
+P_c2n = {}
+P_n2c = {}
+with open('data/PrefExchangeList.csv') as f:
+    f.readline()
+    rs = csv.reader(f)
+    for r in rs:
+        c = r[1]
+        n = r[2]
+        P_c2n[c] = n
+        P_n2c[n] = c
+
+# 来訪人数辞書
+p2c = {}
+c2p = {}
+with open('data/list_pc.csv'):
+    rs = csv.reader(f)
+    for r in rs:
+        p = r[0]
+        c = r[1]
+        v = r[2]
+        if p not in p2c:
+            p2c[p] = {}
+        if c not in c2p:
+            c2p[c] = {}
+        p2c[p][c] = v
+        c2p[c][p] = v
+        
 # 国籍と都道府県の名前とコード変換リストを読み込み
-countryList = pd.read_csv("data/CountryList.csv", names = ('regionCd', 'regionName', 'countryCd', 'countryName'))
-prefList = pd.read_csv("data/PrefExchangeList.csv", names = ('prefName', 'shortName', 'prefCd'))
+# countryList = pd.read_csv("data/CountryList.csv", names = ('regionCd', 'regionName', 'countryCd', 'countryName'))
+# prefList = pd.read_csv("data/PrefExchangeList.csv", names = ('prefName', 'shortName', 'prefCd'))
 
 #参照データ情報
 year = '2015' #対象年
@@ -82,7 +121,22 @@ class Messenger(object):
     ##############################
     ## 新規作成関数エリア
     ##############################
-
+    
+    def get_PrefTop2_fromNation(in_nation):
+        if in_nation not in P_n2c:
+            
+        countryCode = P_n2c[in_nation]
+        res = c2p[countryCode]
+        count = 0
+        cand = []
+        for p, v in sorted(res.items(), lambda x: x[1], reverse=True):
+            cand.append(p)
+            count += 1
+            if count == 2:
+                break
+        return cand[0], cand[1]
+    
+    '''
     def get_resas(key,url):
         x = json.loads(requests.get('https://opendata.resas-portal.go.jp/' + url, headers={'X-API-KEY':key}).text)
         #print (x['message'],x['result'])
@@ -189,7 +243,7 @@ class Messenger(object):
             i += 1
             j = 0
         return tmp_nation1, tmp_nation2
-    
+    '''
     # 都道府県コードから食べログで和食・日本料理の検索結果URLを返す
     def get_taberogu_url(prefCdList):
         url_tabe_list = []
