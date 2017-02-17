@@ -171,8 +171,7 @@ class Messenger(object):
             # tg=24~28 (int, 24:オールシーズン、 25:春、26:夏、27:秋、28:冬)、複数掛け合わせOK
             # timeRequired=所要時間(int) (分)
             # ct=ジャンル(int) (添付写真の上から1〜。ex)7:観光・レジャー )
-            url = 'http://www.asoview.com/search/?ymd=&rg=&ct=7&ac=&np=&q=' + pn + \
-                '&bd=&targetAge=18&timeRequired=180&tg=24&tg=25&tg=26&tg=27&tg=28'
+            url = 'http://www.asoview.com/search/?ymd=&rg=&ct=7&ac=&np=&q=%s&bd=&targetAge=18&timeRequired=180&tg=24&tg=25&tg=26&tg=27&tg=28' % pn.decode('utf-8')
             urls.append(url)
             self.send_message(channel_id, '%s' % (url))
         return urls
