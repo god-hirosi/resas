@@ -73,7 +73,7 @@ class RtmEventHandler(object):
         if ('user' in event) and (not self.clients.is_message_from_me(event['user'])):
 
             msg_txt = event['text']
-            print msg_txt
+            #print msg_txt
             msg_txt = msg_txt.encode('utf-8')
 
             if self.clients.is_bot_mention(msg_txt) or self._is_direct_message(event['channel']):
