@@ -86,7 +86,7 @@ class RtmEventHandler(object):
                 # 国籍を入力されたら、その国籍に人気の都道府県Top2を取得し、情報を推薦する
                 elif msg_txt is not None:
                     for cn in C_n2c:
-                        if cn not in msg_txt:
+                        if cn not in str(msg_txt):
                             continue
                         else:
                             in_nation = cn
