@@ -204,7 +204,7 @@ class RtmEventHandler(object):
                     self.suggest(event)
                 else:
                     self.msg_writer.write_prompt(event['channel'])
-                self.msg_writer.write_param(self.inp, self.prefs, self.purp_r, self.purp_g, event['channel']) 
+                # self.msg_writer.write_param(self.inp, self.prefs, self.purp_r, self.purp_g, event['channel']) 
                 '''
                 elif countryList[countryList['countryName'].str.contains(str(msg_txt))]:
                     self.send_message(event['channel'], "検索しているので、少し待ってね :-)")
