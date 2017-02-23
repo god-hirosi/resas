@@ -118,6 +118,9 @@ class Messenger(object):
     ## 新規作成関数エリア
     ##############################
     
+    def write_noresas(self, channel_id):
+        self.send_message(channel_id, 'あなたの国は現状Resasデータでサポートされていません。'.decode('utf-8'))
+    
     def purpose_check(self, channel_id):
         self.send_message(channel_id, '何を調べたい？ グルメ or 体験から選んでね！'.decode('utf-8'))
     

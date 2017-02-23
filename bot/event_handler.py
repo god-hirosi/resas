@@ -76,11 +76,14 @@ class RtmEventHandler(object):
             self._handle_by_type(event['type'], event)
             
             
-    def get_PrefTop2_fromNation(self, nations):
+    def get_PrefTop2_fromNation(self, nations, channel):
         #if in_nation not in P_n2c:
         cand = {}
         for nation in nations:
             countryCode = C_n2c[nation]
+            if countryCode not in c2p:
+                self.msg_writer.write_noresas(channel)
+                continue
             res = c2p[countryCode]
             count = 0
             for p, v in sorted(res.items(), key=lambda x: x[1], reverse=True):
@@ -189,7 +192,7 @@ class RtmEventHandler(object):
                             else:
                                 nation = cn
                                 self.inp = ['c', cn]
-                                self.get_PrefTop2_fromNation([nation])
+                                self.get_PrefTop2_fromNation([nation], event['channel'])
                                 break
 
                         for pn in P_k2c:
@@ -199,7 +202,7 @@ class RtmEventHandler(object):
                                 pref = pn
                                 self.inp = ['p', pn]
                                 nations = self.get_NationTop2_fromPref(pref)
-                                self.get_PrefTop2_fromNation(nations)
+                                self.get_PrefTop2_fromNation(nations, event['channel'])
                                 break
                     self.suggest(event)
                 else:
